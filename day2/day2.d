@@ -4,20 +4,21 @@ struct Position
 {
     private int horizontalPosition;
     private int depth;
+    private int aim;
 
     Position up(int x) pure const
     {
-        return Position(horizontalPosition, depth - x);
+        return Position(horizontalPosition, depth, aim - x);
     }
 
     Position down(int x) pure const
     {
-        return Position(horizontalPosition, depth + x);
+        return Position(horizontalPosition, depth, aim + x);
     }
 
     Position forward(int x) pure const
     {
-        return Position(horizontalPosition + x, depth);
+        return Position(horizontalPosition + x, depth + aim * x, aim);
     }
 
     int multiply() pure const
