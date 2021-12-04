@@ -13,17 +13,24 @@ void main()
     }
     auto numbers = drawnNumbers.splitter(",");
     int number;
-    while(!cards.any!(c => c.hasWon))
+    while(cards.length > 1)
     {
         number = numbers.front.to!int;
         foreach(card; cards)
         {
             card.draw(number);
         }
+        cards = cards.filter!(c => !c.hasWon).array;
         numbers.popFront;
     }
-    auto winningCard = cards.filter!(c => c.hasWon).front;
-    writeln(number * winningCard.score);
+    auto losingCard = cards[0];
+    while(!losingCard.hasWon)
+    {
+        number = numbers.front.to!int;
+        losingCard.draw(number);
+        numbers.popFront;
+    }
+    writeln(number * losingCard.score);
 }
 
 class BingoCard
@@ -59,6 +66,11 @@ class BingoCard
         {
             field.draw(number);
         }
+    }
+
+    bool hasNumber(int number)
+    {
+        return allFields[].any!(f => f.number == number);
     }
 
     bool hasWon()
