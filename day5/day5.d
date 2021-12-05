@@ -33,7 +33,6 @@ void addLine(Coord from, Coord to)
     const amountOfSteps = max(abs(from.x - to.x), abs (from.y - to.y));
     const stepX = (to.x - from.x) / amountOfSteps;
     const stepY = (to.y - from.y) / amountOfSteps;
-    if(stepX * stepY != 0) return;
     foreach(i; 0 .. amountOfSteps + 1)
     {
         Coord current = Coord(from.x + i * stepX, from.y + i * stepY);
