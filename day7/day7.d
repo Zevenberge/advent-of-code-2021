@@ -2,8 +2,9 @@ import std;
 
 int fuelUsage(int amountOfSteps)
 {
-    if(amountOfSteps == 0) return 0;
-    return amountOfSteps * amountOfSteps - (amountOfSteps - 1).fuelUsage;
+    static int[int] totalFuel;
+    totalFuel[0] = 0;
+    return totalFuel.require(amountOfSteps, amountOfSteps + fuelUsage(amountOfSteps - 1));
 }
 
 void main()
