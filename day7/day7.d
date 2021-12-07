@@ -1,5 +1,11 @@
 import std;
 
+int fuelUsage(int amountOfSteps)
+{
+    if(amountOfSteps == 0) return 0;
+    return amountOfSteps * amountOfSteps - (amountOfSteps - 1).fuelUsage;
+}
+
 void main()
 {
     auto crabs = File("puzzle.input", "r").byLine.front.splitter(",").map!(m => m.to!int);
@@ -11,7 +17,7 @@ void main()
         int thisFuel = 0;
         foreach(crab; crabs)
         {
-            thisFuel += abs(crab - pos);
+            thisFuel += abs(crab - pos).fuelUsage;
         }
         fuel = min(fuel, thisFuel);
     }
