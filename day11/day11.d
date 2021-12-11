@@ -8,6 +8,11 @@ class Octopus
     }
 
     private int _charge;
+    int charge()
+    {
+        return _charge;
+    }
+
     private int _amountOfFlashes;
     int amountOfFlashes()
     {
@@ -22,10 +27,6 @@ class Octopus
     }
 
     private bool _hasFlashed;
-    bool hasFlashed()
-    {
-        return _hasFlashed;
-    }
 
     bool willFlash()
     {
@@ -88,7 +89,7 @@ void flatForeach(alias fun)(Octopus[][] octopuses)
 }
 
 
-bool simulateStep(Octopus[][] octopuses)
+void simulateStep(Octopus[][] octopuses)
 {
     octopuses.flatForeach!(o => o.hit);
     while(octopuses.joiner.any!(o => o.willFlash))
@@ -98,9 +99,7 @@ bool simulateStep(Octopus[][] octopuses)
             octopus.flash;
         }
     }
-    auto haveAllFlashed = octopuses.joiner.all!(o => o.hasFlashed);
     octopuses.flatForeach!(o => o.reset);
-    return haveAllFlasged;
 }
 
 void main()
@@ -116,11 +115,14 @@ void main()
         }
     }
 
-    enum amountOfSteps = 100;
-    foreach(_; 0 .. amountOfSteps)
+    enum amountOfSteps = 1000;
+    foreach(step; 0 .. amountOfSteps)
     {
         octopuses.simulateStep;
+        if(octopuses.joiner.all!(o => o.charge == 0))
+        {
+            writeln(step + 1);
+            return;
+        }
     }
-
-    octopuses.joiner.map!(o => o.amountOfFlashes).sum.writeln;
 }
