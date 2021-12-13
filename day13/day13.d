@@ -65,14 +65,41 @@ void fold(ref Paper paper, string instruction)
     }
 }
 
-size_t countUniques(Paper paper)
+bool[Coord] toAssociativeArray(Paper paper)
 {
     bool[Coord] uniques;
     foreach(dot; paper)
     {
         uniques[dot] = true;
     }
-    return uniques.length;
+    return uniques;
+}
+
+size_t countUniques(Paper paper)
+{
+    return paper.toAssociativeArray.length;
+}
+
+void print(Paper paper)
+{
+    bool[Coord] dots = paper.toAssociativeArray;
+    const maxX = paper.maxElement!(coord => coord.x).x;
+    const maxY = paper.maxElement!(coord => coord.y).y;
+    foreach (y; 0 .. maxY + 1)
+    {
+        foreach (x; 0 .. maxX + 1)
+        {
+            if(Coord(x, y) in dots)
+            {
+                write('#');
+            }
+            else
+            {
+                write(' ');
+            }
+        }
+        writeln;
+    }
 }
 
 void main()
@@ -86,6 +113,9 @@ void main()
         i++;
     }
     i++; // skip empty line;
-    paper.fold(lines[i]);
-    paper.countUniques.writeln;
+    for(; i < lines.length; i++)
+    {
+        paper.fold(lines[i]);
+    }
+    paper.print;
 }
