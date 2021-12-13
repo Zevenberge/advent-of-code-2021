@@ -9,6 +9,10 @@ abstract class Grotto
 {
     static Grotto construct(string name)
     {
+        if(name == start)
+        {
+            return new Entrance();
+        }
         if(name == end)
         {
             return new Exit();
@@ -57,7 +61,9 @@ class SmallGrotto : Grotto
 {
     override bool canMoveTo(Route route)
     {
-        return !route.canFind(this);
+        auto smallCaves = route.filter!(grotto => grotto.isType!SmallGrotto).array;
+        const didNotVisitSmallCaveTwice = !smallCaves.any!(s => smallCaves.filter!(c => c == s).count > 1);
+        return !route.canFind(this) || didNotVisitSmallCaveTwice;
     }
 
     override bool canMoveFrom()
@@ -71,6 +77,19 @@ class LargeGrotto : Grotto
     override bool canMoveTo(Route _)
     {
         return true;
+    }
+
+    override bool canMoveFrom()
+    {
+        return true;
+    }
+}
+
+class Entrance : Grotto
+{
+    override bool canMoveTo(Route _)
+    {
+        return false;
     }
 
     override bool canMoveFrom()
@@ -103,6 +122,11 @@ template flatMap(alias fun)
     {
         return range.map!fun.joiner;
     }
+}
+
+bool isType(T, S)(S input)
+{
+    return cast(T)input !is null;
 }
 
 Route[] traverse(Route[] routes)
