@@ -84,7 +84,7 @@ void main()
     lines.popFront;
     lines.popFront;
     auto polymerizations = lines.map!(line => line.to!string.asPolymerization).array;
-    foreach(step; 0 .. 10)
+    foreach(step; 0 .. 40)
     {
         polymer = polymer.polymerisate(polymerizations);
     }
